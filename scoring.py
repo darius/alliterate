@@ -34,17 +34,16 @@ def entropy(counter):
 def score_em_all(filename):
     with open(filename) as f:
         text = f.read()
-        for sentence in sent_tokenize(text):
-            sentence = ' '.join(sentence.splitlines())
-            words = get_words(sentence)
-            try:
-                nonalliterativeness, counter = score(words)
-            except KeyError:
-#                print 'oops', words
-                pass
-            else:
-                if nonalliterativeness < infinity:
-                    print nonalliterativeness, counter, sentence
+    for sentence in sent_tokenize(text):
+        sentence = ' '.join(sentence.splitlines())
+        words = get_words(sentence)
+        try:
+            nonalliterativeness, counter = score(words)
+        except KeyError:
+            pass
+        else:
+            if nonalliterativeness < infinity:
+                print nonalliterativeness, counter, sentence
 
 def get_words(text):
     "Return text's words in order."
