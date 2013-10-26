@@ -23,6 +23,9 @@ def phonetic(word):
 def known_words():
     return phone_dict.iterkeys()
 
+def is_pronouncing_ambiguous(key):
+    return key + '(2)' in phone_dict
+
 def main():
     import sys
     for line in sys.stdin:
