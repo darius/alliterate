@@ -6,7 +6,7 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 
 import pronounce
 
-def log2(x): return log(x) / log(2)
+def log2(x): return log(x, 2)
 
 infinity = float('Inf')
 
