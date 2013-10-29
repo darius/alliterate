@@ -2,7 +2,7 @@ from __future__ import division
 from math import log
 import re
 from collections import Counter
-from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.tokenize import sent_tokenize
 
 import pronounce
 
@@ -23,7 +23,7 @@ def first_consonant(phones):
     for phone in phones:
         if not pronounce.is_vowel(phone):
             return phone
-    return ''          
+    return ''
 
 def entropy(counter):
     total = sum(counter.values())
@@ -49,24 +49,37 @@ def score_em_all(filename):
 def get_words(text):
     "Return text's words in order."
     return [word.strip("'") for word in re.findall(r"['\w]+", text)]
-    
+
 def entropy_of_sentence(sentence):
    new_line_stripped_sentence = ' '.join(sentence.splitlines())
-   return entropy(Counter(get_words(new_line_stripped_sentence.lower()))), new_line_stripped_sentence    
-   
-   
+   return entropy(Counter(get_words(new_line_stripped_sentence.lower()))), new_line_stripped_sentence
+
+def entropy_of_window(window):
+  return entropy(Counter(window))
+
+def multi_score_window(window):
+    try: 
+       word_e = entropy_of_window(window)
+       sound_e = score(window)[0]
+       return (sound_e, word_e, " ".join(window))
+    except KeyError:
+       pass
+
 def sliding_windows(input, n=6):
   return [input[i:i+n] for i in range(len(input)-n+1)]
 
-if __name__ == '__main__':  
+if __name__ == '__main__':
     with open('great-expectations.txt') as f:
       text = f.read()
-    for entropy, result in sorted(set(map(entropy_of_sentence, sent_tokenize(text)))):
-        if entropy < 1.5 : continue
-        print entropy, result               
+      words = get_words(text.lower())
+      print sorted([x for x in [multi_score_window(window) for window in sliding_windows(words)] if x is not None], key=lambda multi_score: multi_score[0]/multi_score[1])
+
+    # for entropy, result in sorted(set(map(entropy_of_sentence, sent_tokenize(text)))):
+    #         if entropy < 1.5 : continue
+    #         print entropy, result
     # for result in sorted(score_em_all('great-expectations.txt')):
-    #   print result         
-    
+    #   print result
+
 
 ## score('when in the course of human events'.split())
 #. (2.5216406363433186, Counter({'V': 2, 'DH': 1, 'K': 1, 'N': 1, 'HH': 1, 'W': 1}))
