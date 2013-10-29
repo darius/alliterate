@@ -23,7 +23,7 @@ def first_consonant(phones):
     for phone in phones:
         if not pronounce.is_vowel(phone):
             return phone
-    return ''
+    return ''          
 
 def entropy(counter):
     total = sum(counter.values())
@@ -37,20 +37,34 @@ def score_em_all(filename):
     for sentence in sent_tokenize(text):
         sentence = ' '.join(sentence.splitlines())
         words = get_words(sentence)
+        if len(words) == 1: continue
         try:
             nonalliterativeness, counter = score(words)
         except KeyError:
             pass
         else:
             if nonalliterativeness < infinity:
-                print nonalliterativeness, counter, sentence
+                yield nonalliterativeness, counter, sentence
 
 def get_words(text):
     "Return text's words in order."
     return [word.strip("'") for word in re.findall(r"['\w]+", text)]
+    
+def entropy_of_sentence(sentence):
+   new_line_stripped_sentence = ' '.join(sentence.splitlines())
+   return entropy(Counter(get_words(new_line_stripped_sentence.lower()))), new_line_stripped_sentence
 
-if __name__ == '__main__':
-    score_em_all('great-expectations.txt')
+if __name__ == '__main__':  
+    with open('great-expectations.txt') as f:
+      text = f.read()
+    for result in reversed(sorted(map(entropy_of_sentence, sent_tokenize(text)))):
+        print result
+      
+
+               
+    # for result in sorted(score_em_all('great-expectations.txt')):
+    #   print result         
+    
 
 ## score('when in the course of human events'.split())
 #. (2.5216406363433186, Counter({'V': 2, 'DH': 1, 'K': 1, 'N': 1, 'HH': 1, 'W': 1}))
