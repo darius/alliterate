@@ -52,16 +52,18 @@ def get_words(text):
     
 def entropy_of_sentence(sentence):
    new_line_stripped_sentence = ' '.join(sentence.splitlines())
-   return entropy(Counter(get_words(new_line_stripped_sentence.lower()))), new_line_stripped_sentence
+   return entropy(Counter(get_words(new_line_stripped_sentence.lower()))), new_line_stripped_sentence    
+   
+   
+def sliding_windows(input, n=6):
+  return [input[i:i+n] for i in range(len(input)-n+1)]
 
 if __name__ == '__main__':  
     with open('great-expectations.txt') as f:
       text = f.read()
-    for result in reversed(sorted(map(entropy_of_sentence, sent_tokenize(text)))):
-        print result
-      
-
-               
+    for entropy, result in sorted(set(map(entropy_of_sentence, sent_tokenize(text)))):
+        if entropy < 1.5 : continue
+        print entropy, result               
     # for result in sorted(score_em_all('great-expectations.txt')):
     #   print result         
     
