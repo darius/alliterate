@@ -52,7 +52,7 @@ def test(s):
 #. 2.5216406363433186
 
 def first_consontant_entropy(window):
-    return entropy(Counter(map(first_consonant, [pronounce.pronounce(word) for word in window])))
+    return entropy(Counter(first_consonant(pronounce.pronounce(word)) for word in window))
 
 def word_entropy(window):
     return entropy(Counter(window))
