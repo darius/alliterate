@@ -12,9 +12,12 @@ def log2(x): return log(x, 2)
 
 def first_consonant(phones):
     for phone in phones:
-        if not pronounce.is_vowel(phone):
-            return phone
-    return ''
+        try:
+            if not pronounce.is_vowel(phone):
+                return phone
+            return ''
+        except KeyError:
+            pass
 
 def sliding_windows(input, n=8):
   return [input[i:i+n] for i in range(len(input)-n+1)]
@@ -42,12 +45,14 @@ def first_consontant_entropy(window):
 def word_entropy(window):
     return entropy(Counter(window))
 
-
 def total_entropy(window):
-    return word_entropy(window) / first_consontant_entropy(window)
+    try:
+       return first_consontant_entropy(window) / word_entropy(window)
+    except (KeyError, ZeroDivisionError):
+       return infinity
 
 if __name__ == '__main__':
-    with open('great-expectations.txt') as f:
+    with open('test-data.txt') as f:
       text = f.read()
-      for result in sorted([(total_entropy(window), window) for window in sliding_windows(get_words(text.lower()),8)]):
+      for result in sorted([(total_entropy(window), " ".join(window)) for window in sliding_windows(get_words(text.lower()),8)]):
           print result
