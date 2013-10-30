@@ -51,7 +51,7 @@ def test(s):
 ## test('when in the course of human events')
 #. 2.5216406363433186
 
-def first_consontant_entropy(window):
+def first_consonant_entropy(window):
     return entropy(Counter(first_consonant(pronounce.pronounce(word)) for word in window))
 
 def word_entropy(window):
@@ -59,7 +59,7 @@ def word_entropy(window):
 
 def total_entropy(window):
     try:
-       return first_consontant_entropy(window) / word_entropy(window)
+       return first_consonant_entropy(window) / word_entropy(window)
     except (KeyError, ZeroDivisionError):
        return infinity
 
