@@ -1,3 +1,4 @@
+from __future__ import division
 import itertools
 import re
 
@@ -19,8 +20,8 @@ def pronounce(word):
     try:
         return phone_dict[key]
     except KeyError:
-        if key.endswith("'S"):
-            return phone_dict[key[:-2]] + ('Z',)
+        #if key.endswith("'S"):
+            #return phone_dict[key[:-2]] + ('Z',)
         raise
 
 ## pronounce("carrie's")
@@ -41,5 +42,22 @@ def main():
         for word in re.findall(r"['\w]+", line):
             print phonetic(word)
 
+def test():
+    "See how many words can be pronounced"
+    import scoring
+    words = scoring.get_words(open("test-data.txt").read())
+    pronouncables = []
+    for word in words:
+        try:
+            if pronounce(word):
+                pronouncables.append(word)
+        except KeyError:
+            None
+    return len(pronouncables)/len(words)
+# cmu standard: 0.97794822627
+# Darius's posssessive exception 0.972195589645
+#
+
 if __name__ == '__main__':
-    main()
+    print test()
+    #main()
