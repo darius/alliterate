@@ -1,8 +1,7 @@
 from __future__ import division
-from math import log, pow
-import re
 from collections import Counter
-from nltk.tokenize import sent_tokenize
+from math import log
+import re
 
 import pronounce
 
@@ -12,12 +11,9 @@ def log2(x): return log(x, 2)
 
 def first_consonant(phones):
     for phone in phones:
-        try:
-            if not pronounce.is_vowel(phone):
-                return phone
-            return ''
-        except KeyError:
-            pass
+        if not pronounce.is_vowel(phone):
+            return phone
+    return ''
 
 def sliding_windows(input, n=8):
   return [input[i:i+n] for i in range(len(input)-n+1)]
@@ -38,6 +34,22 @@ def score(items, func):
     if not items: return infinity
     counter = Counter(map(func, items))
     return entropy(counter)
+
+def test(s):
+    return score(s.split(),
+                 lambda word: first_consonant(pronounce.pronounce(word)))
+
+## test('peter piper picked a peck')
+#. 0.7219280948873623
+
+## test('peter piper picked a really random rule')
+#. 1.4488156357251847
+
+## test('peter piper picked a different stupid zoo')
+#. 2.128085278891395
+
+## test('when in the course of human events')
+#. 2.5216406363433186
 
 def first_consontant_entropy(window):
     return entropy(Counter(map(first_consonant, [pronounce.phonetic(word).split() for word in window])))
