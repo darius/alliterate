@@ -14,10 +14,10 @@ vowels = frozenset('AA AE AH AO AW AY EH ER EY IH IY OW OY UH UW'.split())
 def is_vowel(phone):
     return phone[-1] in '012'
 
-def pronounce(word):       
+def pronounce(word):
     return phone_dict[word.upper()]
 
-def phonetic(word):       
+def phonetic(word):
     return ' '.join(pronounce(word))
 
 def known_words():
