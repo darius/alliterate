@@ -31,9 +31,7 @@ def get_words(text):
 
 def score(items, func):
     "Lower scores mean more alliteration. But it's really super-crude."
-    if not items: return infinity
-    counter = Counter(map(func, items))
-    return entropy(counter)
+    return entropy(Counter(map(func, items)))
 
 def test(s):
     return score(s.split(),
