@@ -15,7 +15,16 @@ def is_vowel(phone):
     return phone[-1] in '012'
 
 def pronounce(word):
-    return phone_dict[word.upper()]
+    key = word.upper()
+    try:
+        return phone_dict[key]
+    except KeyError:
+        if key.endswith("'S"):
+            return phone_dict[key[:-2]] + ('Z',)
+        raise
+
+## pronounce("carrie's")
+#. ('K', 'EH1', 'R', 'IY0', 'Z')
 
 def phonetic(word):
     return ' '.join(pronounce(word))
