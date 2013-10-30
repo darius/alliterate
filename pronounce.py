@@ -12,7 +12,7 @@ for line in open('cmudict.0.7a'):
 vowels = frozenset('AA AE AH AO AW AY EH ER EY IH IY OW OY UH UW'.split())
 
 def is_vowel(phone):
-    return phone[-1] in '012'
+    return phone[-1] in vowels
 
 def pronounce(word):
     return phone_dict[word.upper()]
