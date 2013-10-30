@@ -15,8 +15,8 @@ def first_consonant(phones):
             return phone
     return ''
 
-def sliding_windows(input, n=8):
-  return [input[i:i+n] for i in range(len(input)-n+1)]
+def sliding_windows(xs, n=8):
+    return [xs[i:i+n] for i in range(len(xs)-n+1)]
 
 def entropy(counter):
     "Shannon's Information Theory Entropy Score"
