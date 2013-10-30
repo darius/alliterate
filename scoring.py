@@ -36,63 +36,18 @@ def score(items, func):
     counter = Counter(map(func, items))
     return entropy(counter)
 
-#def score_em_all(filename):
-    #with open(filename) as f:
-        #text = f.read()
-    #for sentence in sent_tokenize(text):
-        #sentence = ' '.join(sentence.splitlines())
-        #words = get_words(sentence)
-        #if len(words) == 1: continue
-        #try:
-            #nonalliterativeness, counter = score(words, first_consonant)
-        #except KeyError:
-            #pass
-        #else:
-            #if nonalliterativeness < infinity:
-                #yield nonalliterativeness, counter, sentence
+def first_consontant_entropy(window):
+    return entropy(Counter(map(first_consonant, [pronounce.phonetic(word).split() for word in window])))
+
+def word_entropy(window):
+    return entropy(Counter(window))
 
 
-#def entropy_of_sentence(sentence):
-   #new_line_stripped_sentence = ' '.join(sentence.splitlines())
-   #return entropy(Counter(get_words(new_line_stripped_sentence.lower()))), new_line_stripped_sentence
-
-#def entropy_of_window(window):
-  #return entropy(Counter(window))
-
-#def multi_score_window(window):
-    #try: 
-       #first_consonant_e = score(window, first_consonant)[0]
-       #sound_e = score(window, )
-       #word_e = entropy_of_window(window)
-       #try:
-         #combined_e = pow(first_consonant_e, 3)  / word_e
-       #except ZeroDivisionError:
-           #combined_e = infinity
-       #return (combined_e, first_consonant_e, word_e, " ".join(window), Counter(window))
-    #except KeyError:
-       #pass
-
-
-   #word_phones = [pronounce.phonetic(word).split() for word in phrase]
+def total_entropy(window):
+    return word_entropy(window) / first_consontant_entropy(window)
 
 if __name__ == '__main__':
     with open('great-expectations.txt') as f:
       text = f.read()
-      for line in sorted([(score(window, first_consonant)," ".join(window)) for window in sliding_windows(get_words(text.lower()), 8)]):
-          print line
-      
-      #for line in sorted([x for x in [multi_score_window(window) for window in sliding_windows(words)] if x is not None])[:10]:
-          #print line[3]
-
-## score('when in the course of human events'.split())
-#. (2.5216406363433186, Counter({'V': 2, 'DH': 1, 'K': 1, 'N': 1, 'HH': 1, 'W': 1}))
-## score('peter piper picked a peck'.split())
-#. (0.7219280948873623, Counter({'P': 4, '': 1}))
-## score('peter piper picked a really random rule'.split())
-#. (1.4488156357251847, Counter({'P': 3, 'R': 3, '': 1}))
-## score('peter piper picked a different stupid zoo'.split())
-#. (2.128085278891395, Counter({'P': 3, '': 1, 'S': 1, 'Z': 1, 'D': 1}))
-
-
-
-
+      for result in sorted([(total_entropy(window), window) for window in sliding_windows(get_words(text.lower()),8)]):
+          print result
