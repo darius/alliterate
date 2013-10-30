@@ -50,7 +50,8 @@ def test(s):
 #. 2.5216406363433186
 
 def first_consonant_entropy(words):
-    return entropy(Counter(first_consonant(pronounce.pronounce(word)) for word in words))
+    return entropy(Counter(first_consonant(pronounce.pronounce(word))
+                           for word in words))
 
 def word_entropy(words):
     return entropy(Counter(words))
@@ -64,5 +65,7 @@ def boringness(words):
 if __name__ == '__main__':
     with open('test-data.txt') as f:
       text = f.read()
-      for result in sorted([(boringness(window), " ".join(window)) for window in sliding_windows(get_words(text.lower()),8)]):
-          print result
+    words = get_words(text.lower())
+    for result in sorted([(boringness(window), ' '.join(window))
+                          for window in sliding_windows(words, 8)]):
+        print result
