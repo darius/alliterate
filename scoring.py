@@ -57,7 +57,7 @@ def first_consonant_entropy(words):
 def word_entropy(words):
     return entropy(Counter(words))
 
-def total_entropy(words):
+def boringness(words):
     try:
        return first_consonant_entropy(words) / word_entropy(words)
     except (KeyError, ZeroDivisionError):
@@ -66,5 +66,5 @@ def total_entropy(words):
 if __name__ == '__main__':
     with open('test-data.txt') as f:
       text = f.read()
-      for result in sorted([(total_entropy(window), " ".join(window)) for window in sliding_windows(get_words(text.lower()),8)]):
+      for result in sorted([(boringness(window), " ".join(window)) for window in sliding_windows(get_words(text.lower()),8)]):
           print result
